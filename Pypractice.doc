@@ -1,0 +1,488 @@
+#-------------------------
+#json.dump(obj, fp, *, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, default=None, sort_keys=False, **kw)
+#json.dumps(obj, *, skipkeys=False, ensure_ascii=True, check_circular=True, allow_nan=True, cls=None, indent=None, separators=None, default=None, sort_keys=False, **kw)
+#json.load(fp, *, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw)
+#json.loads(s, *, cls=None, object_hook=None, parse_float=None, parse_int=None, parse_constant=None, object_pairs_hook=None, **kw)
+#https://docs.python.org/3/library/json.html
+#You can convert Python objects of the following types, into JSON strings: dict list tuple string int float True False None
+
+import json
+d = {1:'one', 2:'two','three':3, 'four':4, True:'five',5:None, None: 6}
+
+f = open('test_file.doc', 'w')
+#writing to file 'test_file.doc'
+json.dump(d,f)
+f.close()
+j_dumps = json.dumps(d)
+f = open('test_file.doc', 'r')
+j_load = json.load(f)
+f.close()
+j_loads = json.loads(j_dumps)
+
+#-----------------
+Output:- 
+j_dumps {"1": "five", "2": "two", "three": 3, "four": 4, "5": null, "null": 6}
+j_load {'1': 'five', '2': 'two', 'three': 3, 'four': 4, '5': None, 'null': 6}
+j_loads {'1': 'five', '2': 'two', 'three': 3, 'four': 4, '5': None, 'null': 6}
+
+
+
+
+
+#convert a string to Python date time and strip date and time
+#---------------------------------
+import datetime
+
+date_time_str = '2018-06-29 08:15:27.243860'
+date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S.%f')
+
+
+
+Output:- 
+Date: 2018-06-29
+Time: 08:15:27.243860
+Date-time: 2018-06-29 08:15:27.243860
+
+
+
+"Jun 28 2018 at 7:40AM" -> "%b %d %Y at %I:%M%p" 
+#%I is for 12 hour  format
+#%a is for short day format. #%A is for full day format
+#%b is for short month format. %B is for full month format.
+
+"September 18, 2017, 22:19:55" -> "%B %d, %Y, %H:%M:%S"
+"Sun,05/12/99,12:30PM" -> "%a,%d/%m/%y,%I:%M%p"
+"Mon, 21 March, 2015" -> "%a, %d %B, %Y"
+"2018-03-12T10:12:45Z" -> "%Y-%m-%dT%H:%M:%SZ"
+
+#-------------------------
+#how the different types of methods are called from class and instance
+class A:
+    def func1():
+        print('Bare method')
+    @staticmethod
+    def func_stat():
+        print('Static method')
+
+    @classmethod
+    def func_class(cls):
+        print('class method')
+
+    def func_inst(self):
+        print('Instance method')
+
+a = A()
+
+#a.func1() # cannot be called
+a.func_stat()
+a.func_class()
+a.func_inst()
+
+A.func1()
+A.func_stat()
+A.func_class()
+
+
+#-----------------
+Output:- 
+Static method
+class method
+Instance method
+Bare method
+Static method
+class method
+
+
+
+#-------------------------
+#how the different types of methods are called from class and instance
+class A:
+    def func1():
+        print('Bare method')
+    @staticmethod
+    def func_stat():
+        print('Static method')
+
+    @classmethod
+    def func_class(cls):
+        print('class method')
+
+    def func_inst(self):
+        print('Instance method')
+
+a = A()
+
+#a.func1() # cannot be called
+a.func_stat()
+a.func_class()
+a.func_inst()
+
+A.func1()
+A.func_stat()
+A.func_class()
+
+
+#-----------------
+Output:- 
+Static method
+class method
+Instance method
+Bare method
+Static method
+class method
+
+
+#-------------------------
+#Generator class as iterator
+class PrimeGenerator:
+    def __init__(self, stop):
+        self.stop = stop
+        self.start = 2
+
+    def __next__(self):
+        for n in range(self.start, self.stop):  # always search from current start (inclusive) to stop (exclusive)
+            for x in range(2, n):
+                if n % x == 0:  # not prime
+                    break
+            else:  # n is prime, because we've gone through the entire loop without having a non-prime situation
+                self.start = n + 1  # next time we need to start from n + 1, otherwise we will be trapped on n
+                return n  # return n for this round
+        raise StopIteration()  # this is what tells Python we've reached the end of the generator
+
+p = PrimeGenerator(10)
+
+print(next(p))
+print(next(p))
+
+#-----------------
+Output:- 
+5
+7
+
+
+
+#-------------------------
+# map
+def calc(x, y):
+    return x + y
+
+
+l1 = [0, 1, 2, 3]
+l2 = [10, 11, 12, 13]
+
+l3 = list(map(calc, l1, l2))
+print("Map: ", l3)
+
+
+
+#-----------------
+Output:- 
+Map:  [10, 12, 14, 16]
+
+
+
+#-------------------------
+# Filter
+def odd_even(n):
+    return n ** 2
+
+l1 = [0, 1, 2, 3]
+
+l4 = list(filter(odd_even, l1))
+
+print("Filter: ", l4)
+
+#-----------------
+Output:- 
+Filter:  [1, 2, 3]
+
+
+
+#-------------------------
+# Zip
+l1 = [1,22,3,4]
+l2 = ['a','b',4,5,21]
+l5 = list(zip(l2, l1))
+print("Zip: {0}".format(l5))
+
+#-----------------
+Output:- 
+Zip: [('a', 1), ('b', 22), (4, 3), (5, 4)]
+
+
+
+#-------------------------
+from collections import defaultdict, OrderedDict, namedtuple, deque
+
+
+def task1() -> defaultdict:
+    dd = defaultdict(lambda: 'Unknown')
+    dd['Alan'] = 'Manchester'
+    return dd
+
+
+def task2(arg_od: OrderedDict):
+    arg_od.popitem()
+    arg_od.popitem(False)
+    # remember to remove start and end before moving Bob and Dan, otherwise they will be removed instead
+    arg_od.move_to_end('Bob')
+    arg_od.move_to_end('Dan', False)
+
+
+def task3(name: str, club: str) -> namedtuple:
+    Player = namedtuple('Player', ['name', 'club'])
+    player = Player(name, club)
+    return player
+
+
+def task4(arg_deque: deque):
+    arg_deque.pop()  # remove last element
+    arg_deque.append(arg_deque.popleft())  # remove first element and append it to last
+    arg_deque.appendleft('Zack')  # add Zack to start
+
+
+#-----------------
+Output:- 
+
+
+
+#-------------------------
+#Web scraping using Beautifulsoup4
+
+from bs4 import BeautifulSoup
+
+MY_HTM = '''
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Python learing BeautifulSoup4</title>
+</head>
+<body>
+<h1> TRAIN YOUR BRAIN </h1>
+<p> This is a simple html file</p>
+<p> This goes viral in the near future </p>
+<p> Try to finish the job first</p>
+<ul>
+    <li> Orange </li>
+    <li> Banana </li>
+    <li> Apple </li>
+    <li> Grapes </li>
+    <li> Lemon </li>
+
+</body>
+</html>
+'''
+
+hom_htm = BeautifulSoup(MY_HTM, 'html.parser')
+search = hom_htm.find('h1').string # removes the html tag from the string
+print(search)
+
+search1 = hom_htm.find_all('li')
+lst = [e.string for e in search1]
+print(lst)
+#-----------------
+Output:- 
+ TRAIN YOUR BRAIN 
+[' Orange ', ' Banana ', ' Apple ', ' Grapes ', ' Lemon ']
+
+
+
+#Decorator.
+#-------------------------
+from functools import wraps
+user = {'name':'jaiosn', 'access_level':'user'}
+
+def decor_func(func):
+    @wraps(func)
+    def wrapper():
+        if user['access_level'] == 'admin':
+            return func()
+        return f"login level: \'{user['access_level']} \' no access"
+    return wrapper
+
+@decor_func
+def user_check():
+    ''' prints the user password'''
+    return f"user password is: '123456@123'"
+
+print(user_check())
+print(user_check.__name__, '\n', user_check.__doc__)
+
+#-----------------
+Output:- 
+login level: 'user ' no access
+user_check 
+  prints the user password
+
+
+
+#Generic access control decorator
+from functools import wraps
+
+
+def access_control(access_level: int):
+    def outer_wrapper(func):
+        @wraps(func)
+        def inner_wrapper(*arg, **kwargs):
+            if get__user_role() <= access_level:
+                return func(*arg, **kwargs)
+            else:
+                raise PermissionError('You do not have the proper access level.')
+
+        return inner_wrapper
+
+    return outer_wrapper
+
+
+def get_user_role() -> int:
+    return 0
+
+#-----------------
+Output:- 
+
+
+
+#API program accessing https://openexchangerates.org
+
+import requests
+
+API_ID = "a5ca50ed03f74b689fb9ed476b6ca93c"
+URL_ID = "https://openexchangerates.org/api/latest.json"
+
+response = requests.get(f"{URL_ID}?app_id={API_ID}")
+
+res = response.json()["rates"]
+
+usd_amt = 1
+
+inr_amt = usd_amt * res["INR"]
+
+print(f'Rupee rate {inr_amt}')
+
+
+#-----------------
+Output:- 
+Rupee rate 73.159009
+
+
+#Flask
+#templates folder is created in the same level of this py file.
+#post.html is created inside the 'templates' folder
+
+from flask import Flask, render_template
+
+posts = {
+    0: {
+        'title': 'Hello world',
+        'content': 'This is my first blog'
+     }
+}
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return f'Welcome to Hello world'
+
+@app.route('/post/<int:post_id>')
+def my_post(post_id):
+    post = posts.get(post_id)
+    #return f"title {post['title']}, \n \n content  {post['content']}"
+    return render_template('post.html', post = post) # or post = posts.get(post_id)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
+
+#-----------------
+with open('C:/Users/jaisojac/PycharmProjects/2020/test.py','r') as rd:
+    x = ''
+    for i in rd.readlines():
+        if i.startswith('with'):
+            break
+        x += i
+with open('C:/Users/jaisojac/PycharmProjects/2020/Pypractice.doc', 'a') as f:
+    f.write(x)
+    f.close()
+
+import sys
+with open('C:/Users/jaisojac/PycharmProjects/2020/Pypractice.doc', 'a') as f:
+    sys.stdout = f
+    print('Output:- ')
+
+# ---------------------- prints
+    print('\n\n')
+
+import shutil
+shutil.copyfile('C:/Users/jaisojac/PycharmProjects/2020/Pypractice.doc', 'C:/Users/jaisojac/PycharmProjects/2020/Pybackup_practice.doc')
+
+#Flask
+#templates folder is created in the same level of this py file.
+#post.html is created inside the 'templates' folder
+
+from flask import Flask, render_template
+
+posts = {
+    0: {
+        'title': 'Hello world',
+        'content': 'This is my first blog'
+     }
+}
+
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return f'Welcome to Hello world'
+
+@app.route('/post/<int:post_id>')
+def my_post(post_id):
+    post = posts.get(post_id)
+    #return f"title {post['title']}, \n \n content  {post['content']}"
+    return render_template('post.html', post = post) # or post = posts.get(post_id)
+
+
+#-----------------
+Output:- 
+
+import tkinter as tk
+from tkinter import ttk
+
+def greet():
+    print('Hello world')
+
+root = tk.Tk()
+root.title('Hello')
+root_button = ttk.Button(root, text = 'greet', command = greet)
+root_quit = ttk.Button(root, text = 'quit', command = root.quit)
+root_button.pack(side='left', fill = 'x', expand = True)
+root_quit.pack(side='left', fill = 'x', expand = True)
+root.mainloop()
+
+import tkinter as tk
+from tkinter import ttk
+
+
+def greet():
+    print(f"Hello {user_name.get() or 'World'}")
+
+
+root = tk.Tk()
+
+user_name = tk.StringVar()
+root.title('Hello')
+
+root_button = ttk.Button(root, text='greet', command=greet)
+root_quit = ttk.Button(root, text='quit', command=root.quit)
+name_label = ttk.Label(root, text='Name:')
+name_entry = ttk.Entry(root, width='15', textvariable=user_name)
+
+root_button.pack(side='left', fill='x', expand=True)
+name_label.pack(side='left', padx=(0, 10))
+name_entry.pack(side='left')
+root_quit.pack(side='left', fill='x', expand=True)
+
+root.mainloop()
+
+
